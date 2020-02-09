@@ -1,0 +1,65 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Schedule Creator</title>
+  <link rel="stylesheet" type="text/css" href="#" >
+</head>
+
+<body>
+    <a href="/manager">Manager Page</a>
+    <a href="/logout">Logout</a>
+
+
+
+
+      <form action="#" method="POST">
+        <h4>Create New Shift: </h4>
+        <li> 
+        <label for="schedate">Date: </label>
+        <input type="date" id="schedate" name="shiftDate"  >
+        </li>
+        <li> 
+        <label for="schedStart">Schedule Start Time: </label>
+        <input type="time" id="schedStart" name="startTime"  >
+        </li>
+        <li>    
+        <label for="schedEnd">Schedule End Time: </label>
+        <input type="time" id="schedEnd" name="endTime"  >
+        </li>
+        <input type="submit" value="Create Schedule">
+    </form>
+
+    <table>
+        <tr>
+            <th> ScheduleID </th>
+            <th> ShiftID </th>
+            <th> Date  </th>
+            <th> Start Time </th>
+            <th> End Time </th>
+            <th> Employee </th>
+            <th> Edit </th>
+        </tr>
+        <tbody>
+
+            <%        shifts.forEach(function(ele, i){     %>
+                    <% var shiftid = shifts[i].shiftID %>
+                    <% var schedid = shifts[i].scheduleID %>
+                <tr>
+                  <td> <%= schedid %> </td>
+                  <td> <%= shiftid %> </td>
+                  <td> <%= shifts[i].date %> </td>
+                  <td> <%= shifts[i].startTime %> </td>
+                  <td> <%= shifts[i].stopTime %> </td>
+                  <td> <%= shifts[i].employee %> </td>
+                  <td> <a href="/shifts/<%= shiftid %> ">edit </a></td>
+                </tr>  
+              <%        });                                    %>
+
+            </tbody>
+    </table>
+
+
+</body>

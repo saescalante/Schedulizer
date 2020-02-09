@@ -1,0 +1,58 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>UserAccount</title>
+  <link rel="stylesheet" type="text/css" href="#" >
+</head>
+
+<body>
+    <a href="/newuser">Create New Account</a>
+    <a href="/logout">Logout</a>
+
+
+
+
+      <form action="#" method="POST">
+        <h4>Create New Schedule: </h4>
+        <li> 
+        <label for="scheName">Schedule Name: </label>
+        <input type="text" id="scheName" name="scheName"  >
+        </li>
+        <li> 
+        <label for="schedStart">Schedule Start Date: </label>
+        <input type="date" id="schedStart" name="startDate"  >
+        </li>
+        <li>    
+        <label for="schedEnd">Schedule End Date: </label>
+        <input type="date" id="schedEnd" name="endDate"  >
+        </li>
+        <input type="submit" value="Create Schedule">
+    </form>
+
+    <table>
+        <tr>
+            <th> Name </th>
+            <th> Start Date </th>
+            <th> End Date  </th>
+            <th> Update </th>
+        </tr>
+        <tbody>
+
+            <%        Rdata.forEach(function(ele, i){     %>
+                    <% var tempid = Rdata[i].id %>
+                <tr>
+                  <td> <%= Rdata[i].name %> </td>
+                  <td> <%= Rdata[i].start %> </td>
+                  <td> <%= Rdata[i].end %> </td>
+                  <td> <a href="/scheduler/<%= tempid %> ">edit </a></td>
+                </tr>  
+              <%        });                                    %>
+
+            </tbody>
+    </table>
+
+
+</body>

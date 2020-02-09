@@ -1,0 +1,42 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>UserAccount</title>
+  <link rel="stylesheet" type="text/css" href="#" >
+</head>
+
+<body>
+    <a href="/avail">Update Availability</a>
+    <a href="/request">New Time-Off Request</a>
+    <a href="/logout">Logout</a>
+      <h4>Upcoming Shifts:</h4>
+
+<table>
+    <thead>
+        <tr>
+            <th>Schedule </th>
+            <th>Manager </th>
+            <th>Shift Date </th>
+            <th>Start Time</th>
+            <th>Stop Time</th>
+        </tr>
+    </thead>
+        <tbody>
+            <%        Sdata.forEach(function(ele, i){     %>
+                <tr>
+                  <td> <%= Sdata[i].Schedule %> </td> 
+                  <td> <%= Sdata[i].Manager %> </td>
+                  <td> <%= Sdata[i].Date %> </td>
+                  <td> <%= Sdata[i].Start %> </td>
+                  <td> <%= Sdata[i].Stop %> </td>
+                </tr>  
+              <%        });                                    %>
+        </tbody>
+
+
+</table>
+
+</body>

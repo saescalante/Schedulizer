@@ -1,0 +1,109 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Availability</title>
+  <link rel="stylesheet" type="text/css" href="#" >
+</head>
+
+<body>
+    <a href="/user">User Account</a>
+    <a href="/logout">Logout</a>
+      <h4>Update Availability</h4>
+<form action="#" method="POST">
+    <table>
+        <thead>
+            <tr>
+                <th>DAY</th>
+                <th>Availability Start</th>
+                <th>Availability Stop</th>
+            </tr>
+        </thead>
+        <tbody> 
+            <tr>
+                <th>Sunday</th>
+                <td><input type="time" name="SunStart"></td>
+                <td><input type="time" name="SunStop"></td>
+            </tr>
+            <tr>
+                <th>Monday</th>
+                <td><input type="time" name="MonStart"></td>
+                <td><input type="time" name="MonStop"></td>
+            </tr>
+            <tr>
+                <th>Tuesday</th>
+                <td><input type="time" name="TuesStart"></td>
+                <td><input type="time" name="TuesStop"></td>
+            </tr>
+
+            <tr>
+                <th>Wednesday</th>
+                <td><input type="time" name="WedStart"></td>
+                <td><input type="time" name="WedStop"></td>
+            </tr>
+            <tr>
+                <th>Thursday</th>
+                <td><input type="time" name="ThursStart"></td>
+                <td><input type="time" name="ThursStop"></td>
+            </tr>
+            <tr>
+                <th>Friday</th>
+                <td><input type="time" name="FriStart"></td>
+                <td><input type="time" name="FriStop"></td>
+            </tr>            
+            <tr>
+                <th>Saturday</th>
+                <td><input type="time" name="SatStart"></td>
+                <td><input type="time" name="SatStop"></td>
+            </tr>
+        </tbody>               
+    </table>
+    <input type="submit" value= "Update Availability">
+</form>
+<h4>Current Availability</h4>
+<table>
+    <thead>
+        <tr>
+            <th>DAY</th>
+            <th>Availability Start</th>
+            <th>Availability Stop</th>
+        </tr>
+    </thead>
+        <tr>
+            <th>Sunday</th>
+            <td> <%= Adata.Sun1 %> </td>
+            <td> <%= Adata.Sun2 %> </td>
+        </tr>
+        <tr>
+            <th>Monday</th>
+            <td> <%= Adata.Mon1 %> </td>
+            <td> <%= Adata.Mon2 %> </td>
+        </tr>
+        <tr>
+            <th>Tuesday</th>
+            <td> <%= Adata.Tues1 %> </td>
+            <td> <%= Adata.Tues2 %> </td>
+        </tr>
+        <tr>
+            <th>Wednesday</th>
+            <td> <%= Adata.Wed1 %> </td>
+            <td> <%= Adata.Wed2 %> </td>
+        </tr>
+        <tr>
+            <th>Thursday</th>
+            <td> <%= Adata.Thu1 %> </td>
+            <td> <%= Adata.Thu2 %> </td>
+        </tr>
+        <tr>
+            <th>Friday</th>
+            <td> <%= Adata.Fri1 %> </td>
+            <td> <%= Adata.Fri2 %> </td>
+        </tr>
+        <tr>
+            <th>Saturday</th>
+            <td> <%= Adata.Sat1 %> </td>
+            <td> <%= Adata.Sat2 %> </td>
+        </tr>
+</body>
