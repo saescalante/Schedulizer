@@ -3,60 +3,140 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <title>UserAccount</title>
-  <link rel="stylesheet" type="text/css" href="#" >
+  <%- include('partials/head') %>
+  <link rel="stylesheet" type="text/css" href="login.css" >
 </head>
 
-<body>
-    <a href="/newuser">Create New Account</a>
-    <a href="/logout">Logout</a>
+<body class="container">
+    <div class="row">
+            <h5 class="text-center col-sm-12">MANAGER ACCOUNT: 
+                <%= userInfo.firstname %>
+                <%= userInfo.lastname %>
+            </h5>
+    </div>
+    <div class="row">
+        <div class= "card col-md-12 text-center">
+            <h6 class= "card-header">Current Schedules</h6>
+                <table class= "table">
+                  <thead>
+                      <tr>
+                          <th>ScheduleID</th>
+                          <th>Schedule Name</th>
+                          <th>Start Date</th>
+                          <th>End Date</th>
+                          <th>Edit</th>
+                          <th>Delete</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <%        schInfo.forEach(function(ele, i){       %>
+                        <tr>
+                        <td> <%=     ele.scheduleId       %> </td>
+                        <td> <%=     ele.scheName       %> </td>
+                        <td> <%=     ele.startdate       %> </td>
+                        <td> <%=     ele.enddate       %> </td>
+                        <td>    <a href="/schedule/<%=  ele.scheduleId  %>" class="btn btn-primary">Edit</a> </td>
+                        <td>    <a href="/manager/delete/<%=  ele.scheduleId  %>" class="btn btn-danger">Delete</a> </td>
+                        </tr>
+                            <%    });                  %>
+                  </tbody>
+                </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card col-md-12 text-center">
+            <h6 class="card-header">Create New Schedule</h6>
+            <div class="card-body">
+                <form action="/manager/create" method="POST" >
+                    <label for="schName">Schedule Name:</label>
+                    <input type="text" id="schName" name="name" placeholder="Schedule Name">
+                    <label for="schName">Start Date:</label>
+                    <input type="date" id="schName" name="startdate" placeholder="Schedule Name">
+                    <label for="schName">End Date:</label>
+                    <input type="date" id="schName" name="enddate" placeholder="Schedule Name">
+                    <input type="hidden" name="employeeId" value= "<%= userInfo.employeeID %>">
+                    <input type="submit" class="btn btn-primary" value="submit">
+                </form>
 
-  <p>This is the page managers are directed to when they log in.
-    They are able to see/edit any schedules they have created in the table below.
-    They are also able to create new schedules using the form. 
-    note: need to add delete column for schedules
-  </p>
+            </div>
 
 
-      <form action="#" method="POST">
-        <h4>Create New Schedule: </h4>
-        <li> 
-        <label for="scheName">Schedule Name: </label>
-        <input type="text" id="scheName" name="scheName"  >
-        </li>
-        <li> 
-        <label for="schedStart">Schedule Start Date: </label>
-        <input type="date" id="schedStart" name="startDate"  >
-        </li>
-        <li>    
-        <label for="schedEnd">Schedule End Date: </label>
-        <input type="date" id="schedEnd" name="endDate"  >
-        </li>
-        <input type="submit" value="Create Schedule">
-    </form>
-
-    <table>
-        <tr>
-            <th> Name </th>
-            <th> Start Date </th>
-            <th> End Date  </th>
-            <th> Update </th>
-        </tr>
-        <tbody>
-
-            <%        Rdata.forEach(function(ele, i){     %>
-                    <% var tempid = Rdata[i].id %>
-                <tr>
-                  <td> <%= Rdata[i].name %> </td>
-                  <td> <%= Rdata[i].start %> </td>
-                  <td> <%= Rdata[i].end %> </td>
-                  <td> <a href="/scheduler/<%= tempid %> ">edit </a></td>
-                </tr>  
-              <%        });                                    %>
-
-            </tbody>
-    </table>
 
 
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="card col-sm-6">
+            <h6 class="card-header text-center"> Time Off Requests</h6>
+            <div class="card-body">
+                <table class= "table">
+                    <thead>
+                        <tr>
+                            <th>employeeID</th>
+                            <th>Employee Comment</th>
+                            <th>Date</th>
+                            <th>Approved</th>
+                            <th>Select</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <%        timeOff.forEach(function(ele, i){       %>
+                          <tr>
+                          <td> <%=     ele.employeeID       %> </td>
+                          <td> <%=     ele.comment       %> </td>
+                          <td> <%=     ele.date       %> </td>
+                          <td> <%=     ele.approvalStatus       %> </td>
+                          <td>    <a href="/timeoff/approve/<%=  ele.requestId  %>" class="btn btn-success">Approve</a> 
+                                    <a href="/timeoff/deny/<%=  ele.requestId %>" class="btn btn-danger">Deny</a> 
+                            </td>
+                          </tr>
+                              <%    });                  %>
+                    </tbody>
+                  </table>
+
+
+            </div>
+
+        </div>
+        <div class="card col-sm-6">
+            <h6 class="card-header text-center"> Employees</h6>
+            <div class="card-body">
+                <table class= "table">
+                    <thead>
+                        <tr>
+                            <th>employeeID</th>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                            <th>Delete</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <%        employeeInfo.forEach(function(ele, i){       %>
+                          <tr>
+                          <td> <%=     ele.id       %> </td>
+                          <td> <%=     ele.firstname       %> </td>
+                          <td> <%=     ele.lastname       %> </td>
+                          <td>    <a href="/userdelete/<%=  ele.id %>" class="btn btn-danger">Delete</a>  </td>
+                          </tr>
+                              <%    });                  %>
+                    </tbody>
+                  </table>
+
+
+            </div>
+ 
+ 
+        </div>
+    </div>
+
+
+
+
+
+
+    <%- include('partials/footscripts') %>
 </body>
+</html>

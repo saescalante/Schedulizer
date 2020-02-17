@@ -1,6 +1,9 @@
 var express = require("express");
+var request = require("request");
+bodyParser = require("body-parser");
 var app = express();
 
+app.use(bodyParser.urlencoded({extended: true})); 
 app.use(express.static("public"));  //Serve Public folder
 app.set("view engine", "ejs");      //allows links to "about" instead of "about.ejs"
 
@@ -12,178 +15,311 @@ app.set("view engine", "ejs");      //allows links to "about" instead of "about.
 
 //Empty
 app.get("/", function(req,res){
+    res.redirect("/home");
+});
+
+app.get("/home", function(req,res){
     console.log("Incoming / request from " + req.ip)
-    res.redirect("/login");
+
+    tempdata = [
+            {   firstname: "Bill",
+                lastname: "Smith",
+                id: 44,
+                isManager: true
+            },
+            {   firstname: "Sarah",
+                lastname: "Perkins",
+                id: 456,
+                isManager: true
+            },
+            {   firstname: "Sam",
+                lastname: "Moore",
+                id: 21,
+                isManager: false
+            },
+            {   firstname: "Sally",
+                lastname: "Seashells",
+                id: 70,
+                isManager: false
+            },
+            {   firstname: "Roger",
+                lastname: "Toughguy",
+                id: 70,
+                isManager: false
+            }
+        ]
+    res.render("home.ejs",{pagetitle: "Home", Users: tempdata});
 });
 
-//Login
-app.get("/login", function(req,res){
-    res.render("login");
+app.post("/createuser", function(req,res){
+    console.log("create user");
+    res.redirect("/home")
 });
 
+app.post("/accessuser", function(req,res){
+    console.log("access user");
+    var userid = req.body.userNumber
+    console.log(userid)
+    res.redirect("/user/" + userid)
+});
 
-//User
-app.get("/user", function(req,res){
-    var tempData = [
-        { Schedule: 3,
-          Manager: "Bill",
-          Date: "12-4-2021",
-          Start: "11:30 am",
-          Stop: "4:30 pm"  
-        },
-        { Schedule: 2,
-            Manager: "Willa",
-            Date: "12-5-2021",
-            Start: "12:30 pm",
-            Stop: "5:30 pm"  
-        },
-        { Schedule: 3,
-            Manager: "Bill",
-            Date: "12-6-2021",
-            Start: "11:30 am",
-            Stop: "4:30 pm"  
+app.post("/accessmanager", function(req,res){
+    console.log("access manager");
+    var userid = req.body.userNumber
+    console.log(userid)
+    res.redirect("/manager/" + userid)
+});
+
+//////////////////////////////////////////////////////////
+//USER account page
+
+app.get("/user/:usernum", function(req,res){
+    //get user data
+        console.log(req.params.usernum)    //Use this param to get the rest of the info for this user
+        var userObj = { firstname: "firstname",
+                        lastname: "lastname",
+                        email: "morefill",
+                        employeeID: req.params.usernum,
+                        monStart: null, monStop: "10:00", tuesStart: null, tuesStop: null, wedStart: null, wedStop: null, 
+                        thurStart: null, thurStop: null, friStart: null, friStop: null, satStart: null, satStop: null,
+                        sunStart: null, sunStop: null
         }
-    ];
-    res.render("user", {Sdata : tempData});
+    //get schedules based on usernum parameter
+        var scheObj = [{
+            shiftID: 21201,
+            startTime: "fill data",
+            stopTime: "fill data",
+            date: "date data",
+            day: "day of the week",
+            schedName: "filldata",
+            manName: "filldata" },
+        {   shiftID: 56422,
+            startTime: "fill data",
+            stopTime: "fill data",
+            date: "date data",
+            day: "day of the week",
+            schedName: "filldata",
+            manName: "filldata" },
+        {   shiftID: 56422,
+            startTime: "fill data",
+            stopTime: "fill data",
+            date: "date data",
+            day: "day of the week",
+            schedName: "filldata",
+            manName: "filldata" }
+        ]
+
+      
+    //get time off requests
+        var requestObj = [
+            {   date: "filldate",
+                approvalStatus: true,
+                comment: "comment here"},
+            {   date: "filldate",
+                approvalStatus: false,
+                comment: "comment here"},
+            {   date: "filldate",
+                approvalStatus: true,
+                comment: "comment here"},
+        
+        ]
+    res.render("user.ejs",{pagetitle: "User Account", userInfo: userObj, schInfo: scheObj, requestInfo: requestObj});
 });
 
-
-//Time Off Requests
-app.get("/request", function(req,res){
-    var tempData = [
-        { Date: "12-4-2021",
-          Approve: "Yes",
-          id: 11  
-        },
-        {   Date: "12-5-2021",
-            Approve: "No",
-            id: 43  
-        },
-        {   Date: "12-6-2021",
-            Approve: "Yes",
-            id: 21  
-        }
-    ];
-    res.render("requests", {Rdata : tempData});
+app.post("/updateAva", function(req,res){
+    console.log("update availability");
+    console.log(req.body)
+    var userid = req.body.userId
+    console.log(userid)
+    res.redirect("/user/" + userid)
 });
 
-//avalibility
-app.get("/avail", function(req,res){
+app.post("/addTimeOff", function(req,res){
+    console.log("add time off request");
+    var userid = req.body.userId
+    console.log(userid)
+    console.log("done")
+    res.redirect("/user/" + userid)
+});
 
-    var tempData = {
-        Sun1: "12:00",
-        Sun2: "12:00",
-        Mon1: "12:00",
-        Mon2: "12:00",
-        Tues1: "12:00",
-        Tues2: "12:00",
-        Wed1: "12:00",
-        Wed2: "12:00",
-        Thu1: "12:00",
-        Thu2: "12:00",
-        Fri1: "12:00",
-        Fri2: "12:00",
-        Sat1: "12:00",
-        Sat2: "12:00",
+///////////////////////////////////////////////////////////////////////////////
+//Manager Page
+app.get("/manager/:usernum", function(req,res){
+
+    console.log(req.params.usernum)    //Use this param to get the rest of the info for this user
+    var userObj = { firstname: "firstname",
+                    lastname: "lastname",
+                    email: "morefill",
+                    employeeID: req.params.usernum,
+                    monStart: null, monStop: "10:00", tuesStart: null, tuesStop: null, wedStart: null, wedStop: null, 
+                    thurStart: null, thurStop: null, friStart: null, friStop: null, satStart: null, satStop: null,
+                    sunStart: null, sunStop: null
     };
-    res.render("avail", {Adata: tempData});
+
+    var schedObj = [
+            {   managerId: req.params.usernum,
+                scheName: "Cashiers - week6",
+                startdate: "11/12/2010",
+                enddate: "12/12/2010",
+                scheduleId: 12},
+            {   managerId: req.params.usernum,
+                scheName: "Stockers - week6",
+                startdate: "11/12/2010",
+                enddate: "12/12/2010",
+                scheduleId: 13},
+            {   managerId: req.params.usernum,
+                scheName: "Maintenance - week6",
+                startdate: "11/12/2010",
+                enddate: "12/12/2010",
+                scheduleId: 14}
+            ]   
+
+    var timeOff = [
+            {   requestId: 999,
+                employeeID: 16,
+                date: "11/17/2010",
+                comment: "I'm out of town",
+                approvalStatus: false},
+            {   requestId: 992,
+                employeeID: 17,
+                date: "11/17/2010",
+                comment: "I'm out of town",
+                approvalStatus: false},
+            {   requestId: 921,
+                employeeID: 18,
+                date: "11/17/2010",
+                comment: "I'm out of town",
+                approvalStatus: false} ]
+
+    var employees = [            
+        {   firstname: "Sam",
+            lastname: "Moore",
+            id: 21,
+            isManager: false
+        },
+        {   firstname: "Sally",
+            lastname: "Seashells",
+            id: 70,
+            isManager: false
+        },
+        {   firstname: "Roger",
+            lastname: "Toughguy",
+            id: 87,
+            isManager: false
+        }];
+
+
+    res.render("manager.ejs",{pagetitle: "Manager Account", userInfo: userObj, schInfo: schedObj, timeOff: timeOff, employeeInfo: employees});
 });
 
+app.get("/timeoff/approve/:request", function(req,res){
+    console.log("approve request");
+    console.log(req.params.request)
+    //get manager id from request off
+    res.redirect("/manager/80")
+});
 
-//manager
-app.get("/manager", function(req,res){
-    var tempData = [
-        { name: "Cashier - Week6",
-          start: "12-12-2021",
-          end: "12-18-2021",
-          id: 6  
+app.get("/timeoff/deny/:request", function(req,res){
+    console.log("deny request");
+    console.log(req.params.request)
+    //get manager id from request off
+    res.redirect("/manager/90")
+});
+
+app.get("/userdelete/:userId", function(req,res){
+    console.log("delete user");
+    console.log(req.params.request)
+    //get manager id from employee
+    res.redirect("/manager/110" )
+});
+
+app.get("/manager/delete/:userId", function(req,res){
+    console.log("delete schedule");
+    console.log(req.params.request)
+    //get manager id from employee
+    res.redirect("/manager/100" )
+});
+
+app.post("/manager/create", function(req,res){
+    //create new schedule
+    console.log("add new schedule");
+    console.log(req.body)
+    var userid = req.body.employeeId
+    console.log(userid)
+    res.redirect("/manager/" + userid)
+});
+
+//////////////////////////////////////////////////////////////////////////////
+//Schedule page
+app.get("/schedule/:scheNum", function(req,res){
+    var scheduleObj = {schedulename: "Cashiers- week 52",
+                       scheduleid: req.params.scheNum,
+                       startdate: "2018-02-14",
+                       enddate: "2018-02-24" }
+    // console.log(scheduleObj, "done")
+    var shiftObj = [
+        {   shiftID: 16,
+            startTime: "12:13pm",
+            stopTime: "3:25pm",
+            date: "2018-02-20",
+            employeeID: null,
+            employeeName: null,
+            possibleEmploy: [ {id: 21, name: "Bill"},{id: 34, name: "Megan"}, {id: 52, name: "Willis"}]
         },
-        {   name: "Maintenance - Week6",
-            start: "12-12-2021",
-            end: "12-18-2021",
-            id: 8  
+        {   shiftID: 17,
+            startTime: "12:13pm",
+            stopTime: "3:25pm",
+            date: "2018-02-20",
+            employeeID: 21,
+            employeeName: "Bill",
+            possibleEmploy: null
         },
-        {   name: "Stocker - Week6",
-            start: "12-12-2021",
-            end: "12-18-2021",
-            id: 153 
+        {   shiftID: 18,
+            startTime: "12:13pm",
+            stopTime: "3:25pm",
+            date: "2018-02-20",
+            employeeID: null,
+            employeeName: null,
+            possibleEmploy: [ {id: 21, name: "Bill"},{id: 34, name: "Megan"}, {id: 52, name: "Willis"}]
+        },
+        {   shiftID: 19,
+            startTime: "12:13pm",
+            stopTime: "3:25pm",
+            date: "2018-02-20",
+            employeeID: null,
+            employeeName: null,
+            possibleEmploy: null
         }
-    ];
-    res.render("manager",{Rdata: tempData});
-});
-
-//NewUser
-app.get("/newuser", function(req,res){
-    res.render("newuser");
-});
-
-//Scheduler
-app.get("/scheduler/:SchedID", function(req,res){
-    console.log(req.params.SchedID)
-    var tempData = [
-        { scheduleID: req.params.SchedID,
-          shiftID: 9889,
-          date:  "12-18-2021",
-          startTime: "12:10",
-          stopTime:  "12:15",  
-          employee:  "Bill"
-        },
-        {   scheduleID: req.params.SchedID,
-            shiftID: 9565,
-            date:  "12-18-2021",
-            startTime: "12:10",
-            stopTime:  "12:15",  
-            employee:  "Will" 
-        },
-        {   scheduleID: req.params.SchedID,
-            shiftID: 9822,
-            date:  "12-18-2021",
-            startTime: "12:10",
-            stopTime:  "12:15",  
-            employee:  "Jill"
-        }
-    ];
-
-
-
-    res.render("scheduler",{shifts: tempData});
-});
-
-//Shifts
-app.get("/shifts/:shiftID", function(req,res){
-var shiftData = {
-            scheduleID: 51,
-    }
-
-var tempData = [
-    {   username: "Bill",
-        id: 44
-    },
-    {   username: "Sarah",
-        id: 456
-    },
-    {   username: "Moore",
-        id: 21
-    },
-    {   username: "Sally",
-        id: 70
-    },
 ]
 
-    res.render("shift", {shift: shiftData, employees: tempData});
+    res.render("schedule.ejs",{pagetitle: "Schedule Page", schedInfo: scheduleObj, shiftInfo: shiftObj});
 });
 
-//logout
-app.get("/logout", function(req,res){
-    res.redirect("/login");
+app.get("/shiftdelete/:shiftnumber", function(req,res){
+    //create new schedule
+    console.log(req.params.shiftnumber);
+    res.redirect("/schedule/123")
 });
 
-//wildcard
-app.get("*", function(req,res){
-    res.send("404 - not known");
+app.post("/schedule/:scheduleID/createshift", function(req,res){
+    //create new schedule
+    console.log("add new schedule");
+    console.log(req.body)
+    var userid = req.body.employeeId
+    console.log(userid)
+    res.redirect("/schedule/" + req.params.scheduleID)
 });
+app.post("/shiftassign/:shiftID", function(req,res){
+    //create new schedule
+    console.log(req.params.shiftID);
+    console.log("Selected Employee: ", req.body.userNumber)
+    res.redirect("/schedule/456" + req.params.scheduleID)
+});
+app.post("/shiftupdate", function(req,res){
+    //create new schedule
 
-
+    res.redirect("/schedule/456")
+});
 
 // ==============================================
 // LISTEN
@@ -191,5 +327,5 @@ app.get("*", function(req,res){
 
 const PORT = process.env.PORT || 31115;
 app.listen(PORT, function(){
-    console.log("Kudos Server started on port", PORT)
+    console.log("Server started on port", PORT)
 })

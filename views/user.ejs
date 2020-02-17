@@ -3,41 +3,152 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <title>UserAccount</title>
-  <link rel="stylesheet" type="text/css" href="#" >
+  <%- include('partials/head') %>
+  <link rel="stylesheet" type="text/css" href="login.css" >
 </head>
 
-<body>
-    <a href="/avail">Update Availability</a>
-    <a href="/request">New Time-Off Request</a>
-    <a href="/logout">Logout</a>
-      <h4>Upcoming Shifts You Are Scheduled For:</h4>
-      <p>Populated with sample data to show template</p>
+<body class="container">
 
-<table>
-    <thead>
-        <tr>
-            <th>Schedule </th>
-            <th>Manager </th>
-            <th>Shift Date </th>
-            <th>Start Time</th>
-            <th>Stop Time</th>
-        </tr>
-    </thead>
-        <tbody>
-            <%        Sdata.forEach(function(ele, i){     %>
-                <tr>
-                  <td> <%= Sdata[i].Schedule %> </td> 
-                  <td> <%= Sdata[i].Manager %> </td>
-                  <td> <%= Sdata[i].Date %> </td>
-                  <td> <%= Sdata[i].Start %> </td>
-                  <td> <%= Sdata[i].Stop %> </td>
-                </tr>  
-              <%        });                                    %>
-        </tbody>
+    <div class="row">
+            <h5 class="text-center col-sm-12">USER ACCOUNT: 
+                <%= userInfo.firstname %>
+                <%= userInfo.lastname %>
+            </h5>
+    </div>
+    <div class="row">
+        <div class="card col-sm-12">
+            <h6 class="card-header"> Current Schedule:</h6>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Schedule Name</th>
+                            <th>Manager Name</th>
+                            <th>Start Time</th>
+                            <th>Stop Time</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                            <%        schInfo.forEach(function(ele, i){       %>
+                            <tr>
+                            <td> <%=     ele.schedName       %> </td>
+                            <td> <%=     ele.manName       %> </td>
+                            <td> <%=     ele.startTime       %> </td>
+                            <td> <%=     ele.stopTime       %> </td>
+                            <td> <%=     ele.date       %> </td>
+                            </tr>
+                                <%    });                  %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card col-md-6">
+            <h6 class="card-header"> Current Availability</h6>
+            <div class="card-body">
+                <table class= "table">
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Availability Start</th>
+                            <th>Availability End</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                            <tr> <td>Sunday</td><td><%=userInfo.sunStart%></td><td><%=userInfo.sunStop%></td></tr>
+                            <tr> <td>Monday</td><td><%=userInfo.monStart%></td><td><%=userInfo.monStop%></td></tr>
+                            <tr> <td>Tuesday</td><td><%=userInfo.tuesStart%></td><td><%=userInfo.tuesStop%></td></tr>
+                            <tr> <td>Wednesday</td><td><%=userInfo.wedStart%></td><td><%=userInfo.wedStop%></td></tr>
+                            <tr> <td>Thursday</td><td><%=userInfo.thurStart%></td><td><%=userInfo.thurStop%></td></tr>
+                            <tr> <td>Friday</td><td><%=userInfo.friStart%></td><td><%=userInfo.friStop%></td></tr>
+                            <tr> <td>Saturday</td><td><%=userInfo.satStart%></td><td><%=userInfo.satStop%></td></tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card col-md-6">
+            <h6 class="card-header"> Update Availability</h6>
+            <div class="card-body">
+                <!-- REQEUST UPDATE Availability -->
+                <form action="/updateAva" method="POST">
+                  <table class= "table">
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Availability Start</th>
+                            <th>Availability End</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                            <tr> <td>Sunday</td><td><input type="time" name="sunStart"></td><td><input type="time" name="sunStop"></td></tr>
+                            <tr> <td>Monday</td><td><input type="time" name="monStart"></td><td><input type="time" name="monStop"></td></tr>
+                            <tr> <td>Tuesday</td><td><input type="time" name="tuesStart"></td><td><input type="time" name="tuesStop"></td></tr>
+                            <tr> <td>Wednesday</td><td><input type="time" name="wedStart"></td><td><input type="time" name="wedStop"></td></tr>
+                            <tr> <td>Thursday</td><td><input type="time" name="thurStart"></td><td><input type="time" name="thurStop"></td></tr>
+                            <tr> <td>Friday</td><td><input type="time" name="friStart"></td><td><input type="time" name="friStop"></td></tr>
+                            <tr> <td>Saturday</td><td><input type="time" name="satStart"></td><td><input type="time" name="satStop"></td></tr>
+
+                    </tbody>
+                  </table>
+                  <input type="hidden" name="userId"  value="<%=userInfo.employeeID%>"> 
+                  <input type="submit" class="btn btn-primary" value="Update Availability">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="card col-md-6">
+            <h6 class="card-header"> Current Time-Off Requests</h6>
+            <div class="card-body">
+                <table class= "table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Approval Status</th>
+                            <th>Comment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                                                
+                        <%        requestInfo.forEach(function(ele, i){       %>
+                            <tr>
+                            <td> <%=     ele.date       %> </td>
+                            <td> <%=     ele.approvalStatus       %> </td>
+                            <td> <%=     ele.comment       %> </td>
+                            </tr>
+                                <%    });                  %>
 
 
-</table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card col-md-6">
+            <!-- REQUEST FORM  -->
+            <h6 class="card-header"> Add A New Timeoff Request</h6>
+            <div class="card-body">
+                <form action="/addTimeOff" method="POST">
+                    <label for="newdate">Date To Request Off</label>
+                    <input type="date"  id="newdate" name="date">
+                    <label for="newPass">Request Comment</label>
+                    <div>
+                    <textarea  name="comment" ></textarea>
+                    </div>
+                    <input type="hidden" name="userId"  value="<%=userInfo.employeeID%>"> 
+                    <input type="submit" class="btn btn-primary" value="Submit Request">
+                </form>
+            </div>
+        </div>
+    </div>
 
+
+    <%- include('partials/footscripts') %>
 </body>
+</html>
